@@ -17,11 +17,17 @@ public partial class EmpTdsContext : DbContext
 
     public virtual DbSet<AssessmentResponse> AssessmentResponses { get; set; }
 
+    public virtual DbSet<Calendar> Calendars { get; set; }
+
     public virtual DbSet<Notification> Notifications { get; set; }
 
     public virtual DbSet<Registration> Registrations { get; set; }
 
     public virtual DbSet<Report> Reports { get; set; }
+
+    public virtual DbSet<Resort> Resorts { get; set; }
+
+    public virtual DbSet<Room> Rooms { get; set; }
 
     public virtual DbSet<TrainingAssessment> TrainingAssessments { get; set; }
 
@@ -35,10 +41,12 @@ public partial class EmpTdsContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=IN-8PDLV64;Database=Emp_TDS;User Id=sa;Password=sa;Encrypt=False;");
+        => optionsBuilder.UseSqlServer("Server=IN-JMDLV64;Database=Emp_TDS;User id=sa;Password=sa;Encrypt=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
         modelBuilder.Entity<AssessmentResponse>(entity =>
         {
             entity.HasKey(e => e.ResponseId).HasName("PK__Assessme__1AAA646C47B9A261");
@@ -57,6 +65,23 @@ public partial class EmpTdsContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Assessmen__UserI__5812160E");
+        });
+
+        modelBuilder.Entity<Calendar>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Calendar__3213E83F7B493F08");
+
+            entity.ToTable("Calendar");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.MeetingName)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("Meeting_Name");
+            entity.Property(e => e.TeamsLink)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.Time).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Notification>(entity =>
@@ -112,6 +137,56 @@ public partial class EmpTdsContext : DbContext
             entity.HasOne(d => d.GeneratedByNavigation).WithMany(p => p.Reports)
                 .HasForeignKey(d => d.GeneratedBy)
                 .HasConstraintName("FK__Reports__Generat__60A75C0F");
+        });
+
+        modelBuilder.Entity<Resort>(entity =>
+        {
+            entity.HasKey(e => e.ResortId).HasName("PK__resorts__B618DDD72156DBDD");
+
+            entity.ToTable("resorts");
+
+            entity.Property(e => e.ResortId).HasColumnName("resort_id");
+            entity.Property(e => e.City)
+                .HasMaxLength(100)
+                .HasColumnName("city");
+            entity.Property(e => e.DistFromCenter)
+                .HasColumnType("decimal(5, 2)")
+                .HasColumnName("dist_from_center");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
+            entity.Property(e => e.Rating)
+                .HasColumnType("decimal(2, 1)")
+                .HasColumnName("rating");
+            entity.Property(e => e.Stars).HasColumnName("stars");
+        });
+
+        modelBuilder.Entity<Room>(entity =>
+        {
+            entity.HasKey(e => e.RoomId).HasName("PK__rooms__19675A8AE6C1351F");
+
+            entity.ToTable("rooms");
+
+            entity.Property(e => e.RoomId).HasColumnName("room_id");
+            entity.Property(e => e.Balcony).HasColumnName("balcony");
+            entity.Property(e => e.Booked)
+                .HasDefaultValue(false)
+                .HasColumnName("booked");
+            entity.Property(e => e.Capacity).HasColumnName("capacity");
+            entity.Property(e => e.CarpetArea)
+                .HasColumnType("decimal(6, 2)")
+                .HasColumnName("carpet_area");
+            entity.Property(e => e.Price)
+                .HasColumnType("decimal(10, 2)")
+                .HasColumnName("price");
+            entity.Property(e => e.PrivateSwimmingPool).HasColumnName("private_swimming_pool");
+            entity.Property(e => e.ResortId).HasColumnName("resort_id");
+            entity.Property(e => e.SmokingAllowed).HasColumnName("Smoking_allowed");
+
+            entity.HasOne(d => d.Resort).WithMany(p => p.Rooms)
+                .HasForeignKey(d => d.ResortId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__rooms__resort_id__00200768");
         });
 
         modelBuilder.Entity<TrainingAssessment>(entity =>
