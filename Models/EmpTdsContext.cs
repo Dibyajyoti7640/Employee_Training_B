@@ -74,14 +74,27 @@ public partial class EmpTdsContext : DbContext
             entity.ToTable("Calendar");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.EndingDate).HasColumnName("ending_date");
             entity.Property(e => e.MeetingName)
                 .HasMaxLength(200)
                 .IsUnicode(false)
                 .HasColumnName("Meeting_Name");
+            entity.Property(e => e.Organiser)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.StartingDate).HasColumnName("starting_date");
             entity.Property(e => e.TeamsLink)
                 .HasMaxLength(200)
                 .IsUnicode(false);
             entity.Property(e => e.Time).HasColumnType("datetime");
+            entity.Property(e => e.Trainer)
+                .HasMaxLength(200)
+                .IsUnicode(false);
+            entity.Property(e => e.Venue)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("venue");
         });
 
         modelBuilder.Entity<Notification>(entity =>
