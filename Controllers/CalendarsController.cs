@@ -79,7 +79,7 @@ namespace Employee_Training_B.Controllers
         {
             _context.Calendars.Add(calendar);
             await _context.SaveChangesAsync();
-            Console.WriteLine("Hello");
+
             return CreatedAtAction("GetCalendar", new { id = calendar.Id }, calendar);
         }
 
