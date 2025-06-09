@@ -24,4 +24,8 @@ public partial class Calendar
     public string? Venue { get; set; }
 
     public string? Description { get; set; }
+
+    public DateTime? EndTime { get; set; }
+
+    public int? CourseId { get; set; }
 }

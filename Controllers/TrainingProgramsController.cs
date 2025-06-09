@@ -11,7 +11,7 @@ using Employee_Training_B.Models;
 
 namespace Employee_Training.Controllers
 {
-    [Authorize ]
+    //[Authorize ]
     [Route("api/[controller]")]
     [ApiController]
     public class TrainingProgramsController : ControllerBase
