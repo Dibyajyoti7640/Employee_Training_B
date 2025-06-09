@@ -29,6 +29,8 @@ public partial class EmpTdsContext : DbContext
 
     public virtual DbSet<Room> Rooms { get; set; }
 
+    public virtual DbSet<StudyMaterial> StudyMaterials { get; set; }
+
     public virtual DbSet<TrainingAssessment> TrainingAssessments { get; set; }
 
     public virtual DbSet<TrainingCertificate> TrainingCertificates { get; set; }
@@ -41,7 +43,7 @@ public partial class EmpTdsContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=IN-JMDLV64;Database=Emp_TDS;User id=sa;Password=sa;Encrypt=False;");
+        => optionsBuilder.UseSqlServer("Server= IN-JMDLV64;Database=Emp_TDS;User Id=sa; Password=sa;Encrypt=False");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -74,7 +76,11 @@ public partial class EmpTdsContext : DbContext
             entity.ToTable("Calendar");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CourseId).HasColumnName("CourseID");
             entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.EndTime)
+                .HasColumnType("datetime")
+                .HasColumnName("End_time");
             entity.Property(e => e.EndingDate).HasColumnName("ending_date");
             entity.Property(e => e.MeetingName)
                 .HasMaxLength(200)
@@ -198,6 +204,20 @@ public partial class EmpTdsContext : DbContext
                 .HasForeignKey(d => d.ResortId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__rooms__resort_id__00200768");
+        });
+
+        modelBuilder.Entity<StudyMaterial>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__StudyMat__3213E83F1A1EA80E");
+
+            entity.ToTable("StudyMaterial");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Content).HasColumnName("content");
+            entity.Property(e => e.CourseId).HasColumnName("course_id");
+            entity.Property(e => e.DocumentName)
+                .IsUnicode(false)
+                .HasColumnName("Document_Name");
         });
 
         modelBuilder.Entity<TrainingAssessment>(entity =>
