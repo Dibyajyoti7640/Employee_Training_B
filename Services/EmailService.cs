@@ -355,7 +355,7 @@ namespace Employee_Training_B.Services
     <div class=""email-container"">
         <div class=""header"">
             <img src='{logo}' alt=""GyanSys Logo"" style=""max-height: 60px; margin-bottom: 15px;"">
-            
+             `
             <div class=""status-badge"">{statusIcon} {statusText}</div>
         </div>
         <div class=""content"">
