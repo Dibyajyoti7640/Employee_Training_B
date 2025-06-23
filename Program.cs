@@ -103,7 +103,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    app.UseHttpsRedirection();
+}
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("AllowReactApp");
@@ -111,3 +114,5 @@ app.UseCors("AllowReactApp");
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { };

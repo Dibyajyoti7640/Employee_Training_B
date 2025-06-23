@@ -43,12 +43,10 @@ public partial class EmpTdsContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server= IN-JMDLV64;Database=Emp_TDS;User Id=sa; Password=sa;Encrypt=False");
+        => optionsBuilder.UseSqlServer("Server=IN-8PDLV64;Database=Emp_TDS;User id=sa;Password=sa;Encrypt=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
-
         modelBuilder.Entity<AssessmentResponse>(entity =>
         {
             entity.HasKey(e => e.ResponseId).HasName("PK__Assessme__1AAA646C47B9A261");
@@ -71,7 +69,7 @@ public partial class EmpTdsContext : DbContext
 
         modelBuilder.Entity<Calendar>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Calendar__3213E83F7B493F08");
+            entity.HasKey(e => e.Id).HasName("PK__Calendar__3213E83F5AFE8B93");
 
             entity.ToTable("Calendar");
 
@@ -208,7 +206,7 @@ public partial class EmpTdsContext : DbContext
 
         modelBuilder.Entity<StudyMaterial>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__StudyMat__3213E83F1A1EA80E");
+            entity.HasKey(e => e.Id).HasName("PK__StudyMat__3213E83FDBF0A36D");
 
             entity.ToTable("StudyMaterial");
 
