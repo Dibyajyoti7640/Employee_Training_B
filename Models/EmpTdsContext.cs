@@ -19,6 +19,8 @@ public partial class EmpTdsContext : DbContext
 
     public virtual DbSet<Calendar> Calendars { get; set; }
 
+    public virtual DbSet<Certificate> Certificates { get; set; }
+
     public virtual DbSet<Notification> Notifications { get; set; }
 
     public virtual DbSet<Registration> Registrations { get; set; }
@@ -43,7 +45,7 @@ public partial class EmpTdsContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server= IN-JMDLV64;Database=Emp_TDS;User Id=sa; Password=sa;Encrypt=False");
+        => optionsBuilder.UseSqlServer("Server=IN-8SDLV64;Database=Emp_TDS;User id=sa;Password=sa;Encrypt=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -99,6 +101,22 @@ public partial class EmpTdsContext : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false)
                 .HasColumnName("venue");
+        });
+
+        modelBuilder.Entity<Certificate>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Certific__3214EC07AC230F71");
+
+            entity.Property(e => e.FileName).HasMaxLength(255);
+            entity.Property(e => e.Remarks).HasMaxLength(250);
+            entity.Property(e => e.ReviewedOn).HasColumnType("datetime");
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .HasDefaultValue("Pending");
+            entity.Property(e => e.SubmittedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Title).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Notification>(entity =>
