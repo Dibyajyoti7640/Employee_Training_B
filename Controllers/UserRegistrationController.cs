@@ -1,84 +1,39 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Employee_Training_B.Models.Dto;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using CsvHelper;
-using System.Globalization;
-using Employee_Training_B.Models.Dto;
 using PostmarkDotNet;
-using ClosedXML.Excel;
 
 namespace Employee_Training_B.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReminderController : ControllerBase
+    public class UserRegistrationController : ControllerBase
     {
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadEmails(IFormFile file, [FromForm] string subject, [FromForm] string body)
+        [HttpPost]
+        public async Task<IActionResult> SendEmail([FromBody] EmailRequest request)
         {
-            if (file == null || file.Length == 0)
-                return BadRequest("No file uploaded.");
-
-            var emails = new List<string>();
             try
             {
-                var extension = Path.GetExtension(file.FileName).ToLower();
-                if (extension == ".csv")
+                var htmlBody = GenerateHtmlTemplate(request.Subject, request.Body);
+                var message = new PostmarkMessage()
                 {
-                    using var stream = new StreamReader(file.OpenReadStream());
-                    using var csv = new CsvReader(stream, CultureInfo.InvariantCulture);
-                    while (csv.Read())
-                    {
-                        var email = csv.GetField(0);
-                        if (!string.IsNullOrWhiteSpace(email))
-                            emails.Add(email.Trim());
-                    }
-                }
-                else if (extension == ".xlsx")
-                {
-                    using var stream = file.OpenReadStream();
-                    using var workbook = new XLWorkbook(stream);
-                    var worksheet = workbook.Worksheet(1);
-                    var emailColumn = worksheet.Column(1);
-
-                    foreach (var cell in emailColumn.CellsUsed().Skip(1))
-                    {
-                        var email = cell.Value.ToString();
-                        if (!string.IsNullOrWhiteSpace(email))
-                            emails.Add(email.Trim());
-                    }
-                }
-                else
-                {
-                    return BadRequest("Unsupported file format. Please upload .csv or .xlsx.");
-                }
-
-                // Generate HTML content using template
-                var htmlBody = GenerateHtmlTemplate(subject, body);
-
+                    To = request.To,
+                    From = "21052869@kiit.ac.in",
+                    TrackOpens = true,
+                    Subject = request.Subject,
+                    TextBody = request.Body,
+                    HtmlBody = htmlBody,
+                };
                 var client = new PostmarkClient("83aaacca-bbea-408c-847b-41a2276ff5a9");
-                foreach (var email in emails)
-                {
-                    var message = new PostmarkMessage()
-                    {
-                        To = email,
-                        From = "21052869@kiit.ac.in",
-                        TrackOpens = true,
-                        Subject = subject,
-                        HtmlBody = htmlBody,
-                        TextBody = body
-                    };
-                    await client.SendMessageAsync(message);
-                }
+                var res = await client.SendMessageAsync(message);
+                return Ok(res);
 
-                return Ok(new { Message = $"Emails sent to {emails.Count} recipients." });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
-
         private string GenerateHtmlTemplate(string subject, string body)
         {
             var logo = "https://gyansys.com/wp-content/uploads/2023/06/gyansys.gif";
@@ -186,7 +141,7 @@ namespace Employee_Training_B.Controllers
             </div>
             
             <div class=""highlight"">
-                <strong>📋 Important:</strong> Please ensure you complete your training requirements on time.
+                <strong>📋 Important:</strong> Remember your password.
             </div>
             
             <div class=""company-info"">

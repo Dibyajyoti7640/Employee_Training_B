@@ -193,7 +193,8 @@ namespace Employee_Training_B.Migrations
                     ProgramId = table.Column<int>(type: "int", nullable: true),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Comments = table.Column<string>(type: "text", nullable: true),
-                    SubmittedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())")
+                    
+                    tedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
                 {

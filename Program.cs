@@ -1,5 +1,6 @@
 using Employee_Training.Services;
 using Employee_Training_B.Models;
+using Employee_Training_B.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -46,7 +47,7 @@ builder.Services.AddSwaggerGen(options =>
 
 
 builder.Services.AddScoped<JwtService>();
-
+builder.Services.AddScoped<EmailService>();
 var provider = builder.Services.BuildServiceProvider();
 var config = provider.GetRequiredService<IConfiguration>();
 builder.Services.AddDbContext<EmpTdsContext>(item => item.UseSqlServer(config.GetConnectionString("dbcs")));
@@ -114,5 +115,3 @@ app.UseCors("AllowReactApp");
 app.MapControllers();
 
 app.Run();
-
-public partial class Program { };
