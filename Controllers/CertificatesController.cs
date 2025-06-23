@@ -99,7 +99,7 @@ namespace Employee_Training_B.Controllers
             return Ok(new { message = "Certificate review successfully" });
         }
         [HttpGet("download/{certificateID}")]
-        public async Task<ActionResult> downloadCertificate(string certificateID)
+        public async Task<ActionResult> downloadCertificate(int certificateID)
         {
             var material = await _context.Certificates.FindAsync(certificateID);
             if(material == null)
