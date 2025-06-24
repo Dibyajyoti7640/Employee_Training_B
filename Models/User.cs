@@ -19,6 +19,8 @@ public partial class User
 
     public DateTime? CreatedAt { get; set; }
 
+    public int? EmpId { get; set; }
+
     public virtual ICollection<AssessmentResponse> AssessmentResponses { get; set; } = new List<AssessmentResponse>();
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
