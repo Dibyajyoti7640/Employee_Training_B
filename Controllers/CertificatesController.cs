@@ -53,8 +53,10 @@ namespace Employee_Training_B.Controllers
                 return BadRequest("Certificate not found");
             }
             cert.Status = "Under Review";
+
             await _context.SaveChangesAsync();
             var htmlBody = _emailService.GenerateCertificationRequestTemplate(employeeName, certificationType, justification);
+
             var client = new PostmarkClient("83aaacca-bbea-408c-847b-41a2276ff5a9");
             var email = "shankhosuvro.ghosh@gmail.com";
             var message = new PostmarkMessage()
