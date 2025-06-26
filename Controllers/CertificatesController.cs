@@ -74,7 +74,7 @@ namespace Employee_Training_B.Controllers
 
 
         [HttpPost("review")]
-        public async Task<ActionResult> Review(int certificateID, string email, [FromForm] String subject, [FromForm] string body, int hrID, bool isApproved, string? remarks, [FromForm] string EmployeeName, [FromForm] string CertificationType, [FromForm] string adminName, [FromForm] string responseDate, [FromForm] string comments = "", [FromForm] string nextSteps = "")
+        public async Task<ActionResult> Review([FromForm] int certificateID, [FromForm] string email, [FromForm] string subject, [FromForm] string body,[FromForm] int hrID, [FromForm] bool isApproved, [FromForm] string? remarks, [FromForm] string EmployeeName, [FromForm] string CertificationType, [FromForm] string adminName, [FromForm] string responseDate, [FromForm] string comments = "", [FromForm] string nextSteps = "")
         {
             var cert = await _context.Certificates.FindAsync(certificateID);
             if (cert == null)
@@ -144,6 +144,50 @@ namespace Employee_Training_B.Controllers
 
             return Ok(certificate);
 
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateCertificate(int id, IFormFile? file, [FromForm] string? title)
+        {
+            var cert = await _context.Certificates.FindAsync(id);
+            if (cert == null)
+            {
+                return NotFound("Certificate not found");
+            }
+
+            // Update title if provided
+            if (!string.IsNullOrEmpty(title))
+            {
+                cert.Title = title;
+            }
+
+            // Update file if provided
+            if (file != null && file.Length > 0)
+            {
+                using var ms = new MemoryStream();
+                await file.CopyToAsync(ms);
+                cert.FileContent = ms.ToArray();
+                cert.FileName = Path.GetFileName(file.FileName);
+            }
+
+            cert.SubmittedOn = DateTime.Now;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Certificate updated successfully", cert.Id });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteCertificate(int id)
+        {
+            var cert = await _context.Certificates.FindAsync(id);
+            if (cert == null)
+            {
+                return NotFound("Certificate not found");
+            }
+
+            _context.Certificates.Remove(cert);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Certificate deleted successfully" });
         }
 
     }
