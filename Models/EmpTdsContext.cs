@@ -17,6 +17,8 @@ public partial class EmpTdsContext : DbContext
 
     public virtual DbSet<AssessmentResponse> AssessmentResponses { get; set; }
 
+    public virtual DbSet<Attendance> Attendances { get; set; }
+
     public virtual DbSet<Calendar> Calendars { get; set; }
 
     public virtual DbSet<Certificate> Certificates { get; set; }
@@ -41,9 +43,7 @@ public partial class EmpTdsContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-
         => optionsBuilder.UseSqlServer("Server= IN-JMDLV64;Database=Emp_TDS;User Id=sa; Password=sa;Encrypt=False");
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -67,6 +67,28 @@ public partial class EmpTdsContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Assessmen__UserI__5812160E");
+        });
+
+        modelBuilder.Entity<Attendance>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Attendan__3213E83F99751CEA");
+
+            entity.ToTable("Attendance");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.EmailId)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("Email_id");
+            entity.Property(e => e.EmpId).HasColumnName("Emp_Id");
+            entity.Property(e => e.FullName)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("fullName");
+            entity.Property(e => e.MeetingDuration)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("Meeting_Duration");
         });
 
         modelBuilder.Entity<Calendar>(entity =>
@@ -103,7 +125,7 @@ public partial class EmpTdsContext : DbContext
 
         modelBuilder.Entity<Certificate>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Certific__3214EC07F00F005C");
+            entity.HasKey(e => e.Id).HasName("PK__Certific__3214EC07AC230F71");
 
             entity.Property(e => e.FileName).HasMaxLength(255);
             entity.Property(e => e.Remarks).HasMaxLength(250);
