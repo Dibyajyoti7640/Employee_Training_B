@@ -103,7 +103,7 @@ public partial class EmpTdsContext : DbContext
 
         modelBuilder.Entity<Certificate>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Certific__3214EC07AC230F71");
+            entity.HasKey(e => e.Id).HasName("PK__Certific__3214EC07328BD80F");
 
             entity.Property(e => e.FileName).HasMaxLength(255);
             entity.Property(e => e.Remarks).HasMaxLength(250);
@@ -328,6 +328,7 @@ public partial class EmpTdsContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.Department).HasMaxLength(100);
             entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.EmpId).HasColumnName("Emp_ID");
             entity.Property(e => e.FullName).HasMaxLength(100);
             entity.Property(e => e.PasswordHash).HasMaxLength(255);
             entity.Property(e => e.Role).HasMaxLength(50);

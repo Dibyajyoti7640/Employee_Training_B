@@ -60,6 +60,7 @@ namespace Employee_Training.Controllers
             existingUser.Email = userDto.Email;
             existingUser.Role = userDto.Role;
             existingUser.Department = userDto.Department;
+            existingUser.EmpId = userDto.EmpID;
             // Don't update the password hash from this endpoint
             // If password update is needed, create a separate endpoint with proper validation
             try
