@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 #Tests
 Employee_Training_B.Tests/
+appsettings.json

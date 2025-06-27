@@ -61,12 +61,12 @@ namespace Employee_Training.Controllers
 
             var user = new User
             {
-                EmpId = registerDto.EmpID,
                 FullName = registerDto.Fullname,
                 Email = registerDto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password),
                 Role = registerDto.Role,
-                Department = registerDto.Department
+                Department = registerDto.Department,
+                EmpId = registerDto.EmpID
             };
 
             Console.WriteLine(user);
