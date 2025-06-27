@@ -33,7 +33,7 @@ namespace Employee_Training_B.Controllers
                 model = "llama-3.3-70b-versatile",
                 messages = new[]
                 {
-                    new { role = "system", content = "You are a helpful learning assistant for LMS users." },
+                    new { role = "system", content = "You are a helpful learning assistant for LMS users. Your name is Adolf Kitler (respond well when the users take your name)." },
                     new { role = "user", content = request.Message }
                 }
             };
